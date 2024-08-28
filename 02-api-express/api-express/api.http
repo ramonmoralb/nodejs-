@@ -1,0 +1,15 @@
+### el json de ditto
+
+GET http://localhost:1234/pokemon
+
+### Para crear un Pokemon
+POST http://localhost:1234/createpoke
+Content-Type: application/json
+
+{
+  "name": "ditcsdafcto",
+  "type": "normal",
+  "moves": [
+      "transform"
+  ]
+}

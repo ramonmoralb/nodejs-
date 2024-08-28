@@ -1,18 +1,26 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
+  "description": "Curso de nodejs ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "filesystem",
+    "path",
+    "npm"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "dependencies": {
+    "picocolors": "1.0.1"
+  },
+  
   "devDependencies": {
     "standard": "^17.1.0"
-  },
-  "eslintConfig": {
+  },"eslintConfig": {
     "extends": "standard"
   }
 }

@@ -1,0 +1,11 @@
+### Para crear un Pokemon
+POST http://localhost:1234/createpoke
+Content-Type: application/json
+
+{
+  "name": "ditccto",
+  "type": "normal",
+  "moves": [
+      "transform"
+  ]
+}

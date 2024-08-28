@@ -1,2 +1,2 @@
-const { sum } = require('./sum');
-console.log(sum(2, 4));
+const { sum } = require('./sum')
+console.log(sum(2, 4))
