@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probar api rest</title>
+    <style>
+       
+        main{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(19, 2, 2);
+            
+        }
+        article{
+            
+            border: 1px solid black;
+            border-radius:5px ;
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 45px;
+            margin-bottom: 25px;
+            max-width: 500px;
+            background-color: grey;
+        }
+        article:first-child{
+            margin-top: 50px;
+        }
+        article img{
+            max-width: 80%;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        button{
+            background-color: rgb(81, 68, 68);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: .8s ease ;
+        }
+        button:hover{
+            background-color: dimgray;
+            scale: 1.3;
+        }
+    </style>
+    <script type="module">
+        fetch('http://localhost:1234/movies')
+        .then(res => res.json())
+        .then(movies=>{
+            const html = movies.map(movie => {
+                return `
+                    <article data-id="${movie.id}">
+                      <h2>${movie.title}</h2>
+                      <h2>${movie.id}</h2>
+                      <img src="${movie.poster}" alt="${movie.title}">   
+                      <button>Delete</button>                  
+                    </article>`
+            }).join('');
+            document.querySelector('main').innerHTML = html
+        })
+        document.addEventListener('click', e => {
+          if (e.target.matches('button')) {
+            const article = e.target.closest('article')
+            const id = article.dataset.id
+
+            fetch(`http://localhost:1234/movies/${id}`, {
+              method: 'DELETE'
+            })
+              .then(res => {
+                if (res.ok) {
+                  article.remove()
+                    }
+                }
+                )
+            }
+        })
+        
+    </script>
+</head>
+<body>
+    <main>
+
+    </main>
+</body>
+</html>
