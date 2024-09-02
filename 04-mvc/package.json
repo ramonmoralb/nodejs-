@@ -1,5 +1,5 @@
 {
-  "name": "03-api-cors",
+  "name": "04-model-view-controller",
   "version": "1.0.0",
   "description": "Api con cors desde 0",
   "main": "app.js",
@@ -16,6 +16,7 @@
   "author": "ramon moreno",
   "license": "ISC",
   "dependencies": {
+    "cors": "2.8.5",
     "express": "4.19.2",
     "zod": "3.23.8"
   }

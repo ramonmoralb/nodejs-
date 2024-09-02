@@ -1,4 +1,4 @@
-// eesquema de validaciones
+// esquema de validaciones
 import z from 'zod'
 
 const movieSchema = z.object({
