@@ -3,6 +3,7 @@ import { moviesRouter } from './routes/routesMovies.js'
 import { middlewareCors } from './middleware/cors.js'
 
 const app = express()
+app.use(express.json())
 app.disable('x-powered-by')
 app.use(middlewareCors)
 app.use('/movies', moviesRouter)

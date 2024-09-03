@@ -7,7 +7,8 @@ const movies = require('../movies/movies.json')
 export class moviesModel {
     static async getAll({ genre }) {
         if (genre) {
-            return movies.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase()))
+            const filteredMovies = movies.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase()))
+            return filteredMovies
         }
         return movies
     }
@@ -23,6 +24,19 @@ export class moviesModel {
             ...input
         }
         movies.push(newMovie)
+        return newMovie
+    }
+
+    static async update({ id, input }) {
+        const movieIndex = movies.findIndex(movie => movie.id === id)
+        if (movieIndex === -1) return false
+
+        movies[movieIndex] = {
+            ...movies[movieIndex],
+            ...input
+        }
+
+        return movies[movieIndex]
     }
 
     static async delete({ id }) {
