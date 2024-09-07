@@ -1,0 +1,24 @@
+{
+  "name": "05-model-view-controller-database",
+  "version": "1.0.0",
+  "description": "Api con cors desde 0",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app.js"
+  },
+  "keywords": [
+    "cors",
+    "api",
+    "express"
+  ],
+  "author": "ramon moreno",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "2.8.5",
+    "express": "4.19.2",
+    "mysql2": "^3.11.0",
+    "zod": "3.23.8"
+  }
+}

@@ -5,7 +5,7 @@ GET http://localhost:1234/movies
 
 
 ### recuperar película por género
-GET http://localhost:1234/movies?genre=drama
+GET http://localhost:1234/movies?genre=sci-fi
 
 
 ### recuperar película por id
