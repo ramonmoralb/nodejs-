@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'
+// import { movieController } from '../../controller/movieController.js'
 const config = {
     host: 'localhost',
     user: 'root',
@@ -33,18 +34,14 @@ export class moviesModel {
             if (moviesIdRow.length === 0) { return [] }
 
             const moviesIds = moviesIdRow.map(row => row.movie_id)
-            console.log(moviesIds.toString('hex').match(/.{1,8}/g).join('-xdz'))
+
             const [movies] = await connection.query(
-                'SELECT title, yeara, director, duration, poster , rate ,(UNHEX(REPLACE(UUID(), "-", ""))) id  from movie where id in (?);', [moviesIds]
+                'SELECT title, yeara, director, duration, poster , rate , id  from movie where id in (?);', [moviesIds]
             )
 
             const formatedMovies = movies.map(movie => {
                 return {
-                    ...movie,
-                    id: movie.id
-                        .toString('hex') // Convertimos el Buffer a string hexadecimal
-                        .match(/.{1,8}/g) // Dividimos el string en grupos de 8 caracteres
-                        .join('-') // Agregamos los guiones en el formato UUID
+                    ...movie
                 }
             })
 
@@ -55,16 +52,13 @@ export class moviesModel {
 
         // sin genre
         const [movies] = await connection.query(
-            'SELECT title, yeara, director, duration, poster , rate ,(UNHEX(REPLACE(UUID(), "-", ""))) id  from movie;'
+
+            'SELECT title, yeara, director, duration, poster , rate , id  from movie;'
         )
 
         const formatedMovies = movies.map(movie => {
             return {
-                ...movie,
-                id: movie.id
-                    .toString('hex') // Convertimos el Buffer a string hexadecimal
-                    .match(/.{1,8}/g) // Dividimos el string en grupos de 8 caracteres
-                    .join('-') // Agregamos los guiones en el formato UUID
+                ...movie
             }
         })
 
@@ -74,14 +68,94 @@ export class moviesModel {
     }
 
     static async getById({ id }) {
-
+        const [movies] = await connection.query(
+            'SELECT title, yeara, director, duration, poster , rate , id  from movie where id = ? ;', [id]
+        )
+        return movies[0]
     }
 
     static async create({ input }) {
+        const { title, year, director, duration, poster, rate } = input
+        const [uuidResult] = await connection.query(
+            `SELECT generate_movie_id("${title}", ${year} ) AS uuid;`
+        )
+        const [{ uuid }] = uuidResult
 
+        await connection.query(
+            'INSERT INTO movie (id, title, yeara, director, duration, poster, rate) VALUES (? ,?,?,?,?,?,? )', [uuid, title, year, director, duration, poster, rate]
+        )
+        const [movies] = await connection.query(
+            'SELECT title, yeara, director, duration, poster , rate , id  from movie where id = ? ;', [uuid]
+        )
+        return movies[0]
     }
 
     static async delete({ id }) {
+        try {
+            const [movies] = await connection.query(
+                'SELECT * FROM movie where id = ?', [id]
+            )
+            const movie = movies[0]
 
+            if (!movie) return false
+            await connection.query(
+                'DELETE  from movie WHERE id = ?', [id]
+            )
+            return movie
+        } catch (error) {
+            console.log(error.message)
+            return false
+        }
+    }
+
+    static async update({ id, input }) {
+        try {
+            // valores dinámicos, si faltan campos no peta
+            const fields = []
+            const values = []
+
+            // añadimos los campos que se modifican y los valores a los arrays
+            if (input.title) {
+                fields.push('title = ?')
+                values.push(input.title)
+            }
+            if (input.year) {
+                fields.push('yeara = ?')
+                values.push(input.year)
+            }
+            if (input.director) {
+                fields.push('director = ?')
+                values.push(input.director)
+            }
+            if (input.duration) {
+                fields.push('duration = ?')
+                values.push(input.duration)
+            }
+            if (input.poster) {
+                fields.push('poster = ?')
+                values.push(input.poster)
+            }
+            if (input.rate) {
+                fields.push('rate = ?')
+                values.push(input.rate)
+            }
+
+            values.push(id)
+
+            // Construimos la consulta SQL
+            const query = `UPDATE movie SET ${fields.join(', ')} WHERE id = ?`
+
+            // recibe la consulta en un string y los valores en un array
+            await connection.query(query, values)
+
+            const [movies] = await connection.query(
+                'SELECT * FROM movie WHERE id = ?', [id]
+            )
+
+            const movie = movies[0]
+            return movie
+        } catch (error) {
+            console.log(error.message) // esto no se debe hacer, el user podría ver el error
+        }
     }
 }

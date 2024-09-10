@@ -10,14 +10,14 @@ export class movieController {
             return res.json(movies)
         }
 
-        return res.status(404).json({ error: 'Not found' })
+        return res.status(404).json({ error: '/Controller/Not found' })
     }
 
     static async getById(req, res) {
         const { id } = req.params
         const movie = await moviesModel.getById({ id })
         if (movie) return res.json(movie)
-        res.status(404).json({ message: 'resource not found' })
+        res.status(404).json({ message: '/Controller/Resource not found' })
     }
 
     static async create(req, res) {
@@ -43,9 +43,9 @@ export class movieController {
 
     static async delete(req, res) {
         const { id } = req.params
-        const result = await moviesModel.delete({ id })
+        const movieDeleted = await moviesModel.delete({ id })
 
-        if (result === false) { return res.status(404).json({ message: 'not found' }) }
-        return res.status(200).json({ message: 'deleted' })
+        if (movieDeleted === false) { return res.status(404).json({ message: 'not found' }) }
+        return res.status(200).json({ message: 'Deleted', movieDeleted })
     }
 }
